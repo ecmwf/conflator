@@ -22,3 +22,7 @@ poetry add conflator
 
 Coming soon...
 
+
+## Limitations
+
+CLIArgs won't be created for submodels which aren't loaded at first initialization.

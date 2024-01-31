@@ -1,0 +1,12 @@
+*.py[cod]
+*.swp
+**/__pycache__
+.so
+.pytest_cache
+.vscode
+telepresence.log
+.coverage
+htmlcov
+validated.yaml
+merged.yaml
+**/build
