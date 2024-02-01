@@ -1,8 +1,6 @@
 from typing import Annotated, Tuple, Union
 
-from pydantic import (
-    Field,
-)
+from pydantic import Field
 
 from conflate import CLIArg, ConfigModel, Conflater, EnvVar
 
