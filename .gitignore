@@ -1,6 +1,7 @@
 *.py[cod]
 *.swp
 **/__pycache__
+**/__pycache__/*
 .so
 .pytest_cache
 .vscode

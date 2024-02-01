@@ -35,16 +35,17 @@ class NestedConfig(ConfigModel):
 
 class Config(ConfigModel):
 
-    user_email: Annotated[str, Field(), EnvVar('USER_EMAIL'), CLIArg(long_name="user-email", short_name="ue")] = "foo"
+    user_email: Annotated[str, Field(), EnvVar('USER_EMAIL'), CLIArg("--user-email")] = "foo"
     user_key : Annotated[str, Field(description="Your API Key"), EnvVar('XYZ')] = "xyz"
     url : str = "http://example.com"
     secure : bool = Field(False)
     nested : NestedConfig = None
+    # nested_list : List[List[NestedConfig]] = None
 
 
 print("END DEF")
 
-c = Conflater("polytope", Config, cli=False, nested={}).load()
+c = Conflater("polytope", Config, nested={}).load()
 
 
 print("doing...")
