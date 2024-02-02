@@ -17,7 +17,7 @@ Conflator loads configuration in the following order:
 
 ...and then validates the merged configuration against the Pydantic model.
 
-> Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one.
+<!-- > Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one. -->
 
 ## Installation
 
