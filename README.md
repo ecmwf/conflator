@@ -40,15 +40,13 @@ poetry add conflator
 ```python
 from pydantic import Field
 from conflate import EnvVar, CLIArg, ConfigModel
+from annotations import Annotated
 
 class AppConfig(ConfigModel):
 
     host: str = "localhost"
     port: Annotated[int, EnvVar("PORT"), CLIArg("--port")] = 5432
     user: Annotated[str, EnvVar("USER"), CLIArg("--user"), Field(description="Your username")]
-
-    # You can nest ConfigModels as usual, and use the `EnvVar` and `CLIArg` annotations on nested models
-    # more_config: Annotated[MoreConfig, EnvVar("MORE_CONFIG"), CLIArg("--more-config")] = MoreConfig()
 ```
 
 2. **Initialize Conflater**: Create an instance of the Conflater class, passing your application's name and the configuration model.
@@ -71,6 +69,20 @@ print(f"Port: {config.port}")
 
 ```bash
 your-app -f ./config/base.yaml -f ./config/production.yaml
+```
+
+### Nested config just works
+```python
+from annotations import Annotated
+from conflate import EnvVar, CLIArg, ConfigModel
+
+class DeeperConfig(ConfigModel):
+    nested: Annnotated[str, EnvVar("NESTED"), CLIArg("--nested")] = "default"
+
+class Config(ConfigModel):
+    host: str = "localhost"
+    port: int = 543
+    deeper: DeeperConfig = DeeperConfig()
 ```
 
 ### Generate the JSON schema for your configuration
