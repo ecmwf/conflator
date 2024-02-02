@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Load small app configurations from environment variables, command line arguments and config files, according to a pydantic model."
 authors = ["James Hawkes <James.Hawkes@ecmwf.int>"]
 readme = "README.md"
+license = "Apache-2.0"
+repository = "https://github.com/ecmwf/conflator/"
 
 [tool.poetry.dependencies]
 python = "^3.11"
