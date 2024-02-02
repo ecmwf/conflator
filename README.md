@@ -56,13 +56,12 @@ from conflate import Conflater
 
 config = Conflater(app_name="my_app", model=AppConfig).load()
 ```
-Try setting MY_APP_USER in your environment to see the value change, or use the `--user` flag to override the value.
 
 3. **Access Configuration**: Use the loaded configuration throughout your application, knowing that the configuration has been fully validated.
 ```python
-print(f"Host: {config.host}")
-print(f"Port: {config.port}")
+print(f"User: {config.user}")
 ```
+Try setting MY_APP_USER in the environment to see the value change, or use the `--user` flag to override the value.
 
 ## Advanced Usage
 
