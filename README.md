@@ -13,7 +13,7 @@ Conflator loads configuration in the following order:
 1. Default values specified in the Pydantic model
 2. System-wide configuration in /etc/appname/config.json (or yaml)
 3. User configuration in ~/.appname.json (or yaml)
-4. Additional configuration files and values provided as command line args (with `-f filename` and `--set value.deeper=foo`)
+4. Additional configuration files and values provided as command line args (e.g. `-f filename` or `--set value.deeper=foo`)
 4. Environment variables
 5. Command-line arguments
 6. Dictionaries passed to the load method
@@ -39,20 +39,17 @@ poetry add conflator
 1. **Define Your Configuration Model**: Begin by defining your configuration schema using Pydantic models. Annotate your model fields with `EnvVar` and `CLIArg` for environment variable and command-line argument support, respectively.
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import Field
 from conflate import EnvVar, CLIArg, ConfigModel
 
 class AppConfig(ConfigModel):
 
-    # These type annotations all work seamlessly
-    name: str = "my_app"
-    host: str = Field(default="localhost", description="Service hostname")
-    timeout: int = Annotated[10, Field(description="Timeout when connecting")]
+    host: str = "localhost"
     port: Annotated[int, EnvVar("PORT"), CLIArg("--port")] = 5432
-    user: Annotated[str, EnvVar("USER"), CLIArg("--user")] = Field(description="Your username")
+    user: Annotated[str, EnvVar("USER"), CLIArg("--user"), Field(description="Your username")]
 
-    # You can nest ConfigModels as usual
-    # more_config: Annotated[MoreConfig, EnvVar("MORE_CONFIG"), CLIArg("--more-config")] = DbConfig()
+    # You can nest ConfigModels as usual, and use the `EnvVar` and `CLIArg` annotations on nested models
+    # more_config: Annotated[MoreConfig, EnvVar("MORE_CONFIG"), CLIArg("--more-config")] = MoreConfig()
 ```
 
 2. **Initialize Conflater**: Create an instance of the Conflater class, passing your application's name and the configuration model.
@@ -65,8 +62,8 @@ config = Conflater(app_name="my_app", model=AppConfig).load()
 
 3. **Access Configuration**: Use the loaded configuration throughout your application, knowing that the configuration has been fully validated.
 ```python
-print(f"Database Host: {config.host}")
-print(f"Database Port: {config.port}")
+print(f"Host: {config.host}")
+print(f"Port: {config.port}")
 ```
 
 ## Advanced Usage
