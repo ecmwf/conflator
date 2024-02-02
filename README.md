@@ -1,10 +1,9 @@
 ![conflator logo](docs/conflator.png)
 
-# Conflator
-
 > Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one.
 
-:warning: This project is BETA and will be experimental for the forseable future. Interfaces and functionality are likely to change, and the project itself may be scrapped. DO NOT use this software in any project/software that is operational.
+> [!WARNING]
+> This project is BETA and will be experimental for the forseable future. Interfaces and functionality are likely to change, and the project itself may be scrapped. DO NOT use this software in any project/software that is operational.
 
 Conflator is a configuration-handling library for Python. It is designed to simplify the handling of configuration from multiple sources, such as environment variables, command line arguments, and configuration files. As an application or library developer, you specify your configuration schema with a Pydantic model, and conflator will handle the rest.
 
