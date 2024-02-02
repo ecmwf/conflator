@@ -11,8 +11,8 @@ Conflator is a configuration-handling library for Python. It is designed to simp
 Conflator loads configuration in the following order:
 
 1. Default values specified in the Pydantic model
-2. System-wide configuration in /etc/appname/config.json (or yaml)
-3. User configuration in ~/.appname.json (or yaml)
+2. System-wide configuration in /etc/appname/config.json (and yaml)
+3. User configuration in ~/.appname.json (and yaml)
 4. Additional configuration files and values provided as command line args (e.g. `-f filename` or `--set value.deeper=foo`)
 4. Environment variables
 5. Command-line arguments

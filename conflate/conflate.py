@@ -86,7 +86,9 @@ class Conflater:
 
         self.config_files = [
             Path() / "etc" / self.app_name / "config.json",
-            Path.home() / f".{self.app_name}apirc",
+            Path() / "etc" / self.app_name / "config.yaml",
+            Path.home() / f".{self.app_name}.json",
+            Path.home() / f".{self.app_name}.yaml",
         ]
 
     @staticmethod
