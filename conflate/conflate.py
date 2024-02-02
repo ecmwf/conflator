@@ -196,6 +196,9 @@ class Conflater:
 
         return result
 
+    def schema(self):
+        return self.model.model_json_schema()
+
     @staticmethod
     def _dot_path_to_nested_dict(path: str, value: Any, convert_hyphens_to_underscores: bool = True) -> Dict[str, Any]:
         """

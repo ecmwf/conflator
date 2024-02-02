@@ -2,7 +2,23 @@
 
 # Conflator
 
+> Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one.
+
+:warning: This project is BETA and will be experimental for the forseable future. Interfaces and functionality are likely to change, and the project itself may be scrapped. DO NOT use this software in any project/software that is operational.
+
 Conflator is a configuration-handling library for Python. It is designed to simplify the handling of configuration from multiple sources, such as environment variables, command line arguments, and configuration files. As an application or library developer, you specify your configuration schema with a Pydantic model, and conflator will handle the rest.
+
+Conflator loads configuration in the following order:
+
+1. Default values specified in the Pydantic model
+2. System-wide configuration in /etc/appname/config.json (or yaml)
+3. User configuration in ~/.appname.json (or yaml)
+4. Additional configuration files and values provided as command line args (with `-f filename` and `--set value.deeper=foo`)
+4. Environment variables
+5. Command-line arguments
+6. Dictionaries passed to the load method
+
+...and then validates the merged configuration against the Pydantic model.
 
 ## Installation
 
@@ -20,29 +36,20 @@ poetry add conflator
 
 ## Usage
 
-1. **Define Your Configuration Model**: Begin by defining your configuration schema using Pydantic models. Annotate your model fields with EnvVar and CLIArg for environment variable and command-line argument support, respectively.
+1. **Define Your Configuration Model**: Begin by defining your configuration schema using Pydantic models. Annotate your model fields with `EnvVar` and `CLIArg` for environment variable and command-line argument support, respectively.
 
 ```python
 from pydantic import BaseModel, Field
 from conflate import EnvVar, CLIArg, ConfigModel
 
-# Inherit from ConfigModel instead of pydantic's BaseModel
 class AppConfig(ConfigModel):
 
-    # Simple type hinting
-    db_name: str = "my_app"
-
-    # Using pydantic's Field class
-    db_host: str = Field(default="localhost", description="Database host")
-
-    # Using annotations
-    db_timeout: int = Annotated[10, Field(description="Database timeout")]
-
-    # Using conflate's EnvVar and CLIArg annotations
-    db_port: Annotated[int, EnvVar("DB_PORT"), CLIArg("--db-port")] = 5432
-
-    # Using conflate's EnvVar and CLIArg annotations with pydantic's Field class
-    db_user: Annotated[str, EnvVar("DB_USER"), CLIArg("--db-user")] = Field(description="Database user")
+    # These type annotations all work seamlessly
+    name: str = "my_app"
+    host: str = Field(default="localhost", description="Service hostname")
+    timeout: int = Annotated[10, Field(description="Timeout when connecting")]
+    port: Annotated[int, EnvVar("PORT"), CLIArg("--port")] = 5432
+    user: Annotated[str, EnvVar("USER"), CLIArg("--user")] = Field(description="Your username")
 
     # You can nest ConfigModels as usual
     # more_config: Annotated[MoreConfig, EnvVar("MORE_CONFIG"), CLIArg("--more-config")] = DbConfig()
@@ -56,14 +63,23 @@ from conflate import Conflater
 config = Conflater(app_name="my_app", model=AppConfig).load()
 ```
 
-3. **Access Configuration**: Use the loaded configuration throughout your application.
+3. **Access Configuration**: Use the loaded configuration throughout your application, knowing that the configuration has been fully validated.
 ```python
-print(f"Database Host: {config.db_host}")
-print(f"Database Port: {config.db_port}")
+print(f"Database Host: {config.host}")
+print(f"Database Port: {config.port}")
 ```
 
-4. **Environment Variables and CLI Arguments**: Conflator automatically maps environment variables and CLI arguments to your configuration model. For example, the db_port field can be set using the MY_APP_DB_PORT environment variable or the --db-port CLI argument.
+## Advanced Usage
 
+### Configuration layering for different deployments
+
+```bash
+your-app -f ./config/base.yaml -f ./config/production.yaml
+```
+
+### Generate the JSON schema for your configuration
+```bash
+```
 
 ## Limitations
 

@@ -30,3 +30,5 @@ class Config(ConfigModel):
 
 c = Conflater("polytope", Config, nested={}).load()
 
+print(Conflater("polytope", Config, nested={}).schema())
+
