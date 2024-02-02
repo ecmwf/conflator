@@ -36,7 +36,7 @@ class AppConfig(ConfigModel):
     db_host: str = Field(default="localhost", description="Database host")
 
     # Using annotations
-    db_timeout: int = Annotation(10, Field(description="Database timeout")))
+    db_timeout: int = Annotated[10, Field(description="Database timeout")]
 
     # Using conflate's EnvVar and CLIArg annotations
     db_port: Annotated[int, EnvVar("DB_PORT"), CLIArg("--db-port")] = 5432
