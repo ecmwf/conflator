@@ -46,7 +46,7 @@ class AppConfig(ConfigModel):
 
     host: str = "localhost"
     port: Annotated[int, EnvVar("PORT"), CLIArg("--port")] = 5432
-    user: Annotated[str, EnvVar("USER"), CLIArg("--user"), Field(description="Your username")]
+    user: Annotated[str, EnvVar("USER"), CLIArg("--user"), Field(description="Your username")] = "foo"
 ```
 
 2. **Initialize Conflater**: Create an instance of the Conflater class, passing your application's name and the configuration model.
@@ -56,6 +56,7 @@ from conflate import Conflater
 
 config = Conflater(app_name="my_app", model=AppConfig).load()
 ```
+Try setting MY_APP_USER in your environment to see the value change, or use the `--user` flag to override the value.
 
 3. **Access Configuration**: Use the loaded configuration throughout your application, knowing that the configuration has been fully validated.
 ```python
