@@ -1,7 +1,5 @@
 ![conflator logo](docs/conflator.png)
 
-> Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one.
-
 > [!WARNING]
 > This project is BETA and will be experimental for the forseable future. Interfaces and functionality are likely to change, and the project itself may be scrapped. DO NOT use this software in any project/software that is operational.
 
@@ -18,6 +16,8 @@ Conflator loads configuration in the following order:
 6. Dictionaries passed to the load method
 
 ...and then validates the merged configuration against the Pydantic model.
+
+> Conflate (/kənˈfleɪt/): combine (two or more sets of information, texts, ideas, etc.) into one.
 
 ## Installation
 
