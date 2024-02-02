@@ -2,7 +2,7 @@ from typing import Annotated, Tuple, Union
 
 from pydantic import Field
 
-from conflate import CLIArg, ConfigModel, Conflater, EnvVar
+from conflator import CLIArg, ConfigModel, Conflater, EnvVar
 
 
 class DoubleNested2(ConfigModel):

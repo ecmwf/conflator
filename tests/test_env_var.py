@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from conflate import CLIArg, ConfigModel, Conflater, EnvVar, EnvVar
+from conflator import CLIArg, ConfigModel, Conflater, EnvVar, EnvVar
 from pydantic import Field
 from annotated_types import Annotated
 

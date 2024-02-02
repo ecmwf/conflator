@@ -3,7 +3,7 @@ from typing import List
 from annotated_types import Annotated
 from pydantic import Field
 
-from conflate import CLIArg, ConfigModel, Conflater, EnvVar
+from conflator import CLIArg, ConfigModel, Conflater, EnvVar
 
 
 class NestedConfig(ConfigModel):
