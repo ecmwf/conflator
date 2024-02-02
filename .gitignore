@@ -11,3 +11,4 @@ htmlcov
 validated.yaml
 merged.yaml
 **/build
+.ruff_cache
