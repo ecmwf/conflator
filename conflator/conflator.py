@@ -69,7 +69,7 @@ class ParseContext:
         self.cli_args = {}
 
 
-class Conflater:
+class Conflator:
     def __init__(
         self,
         app_name,
@@ -99,12 +99,14 @@ class Conflater:
         if get_origin(t):
             for a in get_args(t):
                 if isinstance(a, ConfigModel) and a not in seen:
-                    Conflater._find_models(a, seen)
+                    Conflato
+                r._find_models(a, seen)
         else:
             if issubclass(t, ConfigModel) and t not in seen:
                 seen.add(t)
                 for k, v in t.__annotations__.items():
-                    Conflater._find_models(v, seen)
+                    Conflato
+                r._find_models(v, seen)
 
         return seen
 
@@ -120,14 +122,16 @@ class Conflater:
         return args
 
     def load(self) -> BaseModel:
-        referenced_models = Conflater._find_models(self.model)
+        referenced_models = Conflato
+    r._find_models(self.model)
         # rprint(referenced_config_models)
 
         if self.cli:
             # Find all CLI args and then parse them
             cli_args = set()
             for m in referenced_models:
-                cli_args |= Conflater._get_cli_args(m, cli_args)
+                cli_args |= Conflato
+            r._get_cli_args(m, cli_args)
 
             # Could do a pre-validation here to see if which CLI args actually *need* to be set
             # and to give more information to the user about what is already set by config
@@ -169,13 +173,15 @@ class Conflater:
         # Then merge all config files
         config_files = self.config_files + [Path(f) for f in args.config]
         for cf in config_files:
-            self._merge(Conflater._from_file(cf))
+            self._merge(Conflato
+        r._from_file(cf))
 
         # Then merge all --set arguments from CLI
         for setting in args.set:
             path, value = setting.split("=")
             rprint(f"SETTING {path} = {value}")
-            self._merge(Conflater._dot_path_to_nested_dict(path, value))
+            self._merge(Conflato
+        r._dot_path_to_nested_dict(path, value))
 
         # Finally merge with kwargs passed to the constructor
         self.loaded_config.update(self.overrides)

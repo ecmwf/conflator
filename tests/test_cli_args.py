@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import pytest
-from conflator import CLIArg, Conflater, EnvVar, ConfigModel
+from conflator import CLIArg, Conflator, EnvVar, ConfigModel
 from annotated_types import Annotated
 from pydantic import Field
 
@@ -15,7 +15,7 @@ class Config(ConfigModel):
 def test_cli_argument_override():
     test_args = ["--test-email", "cli@example.com"]
     with patch("sys.argv", ["test_script.py"] + test_args):
-        conflater = Conflater("polytope", Config, nested={})
-        config = conflater.load()
+        conflator = Conflator("polytope", Config, nested={})
+        config = conflator.load()
 
         assert config.test_email == "cli@example.com"

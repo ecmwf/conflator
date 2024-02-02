@@ -2,7 +2,7 @@ from typing import Annotated, Tuple, Union
 
 from pydantic import Field
 
-from conflator import CLIArg, ConfigModel, Conflater, EnvVar
+from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
 
 class DoubleNested2(ConfigModel):
@@ -28,7 +28,7 @@ class Config(ConfigModel):
     # nested_list : List[List[NestedConfig]] = None
 
 
-c = Conflater("polytope", Config, nested={}).load()
+c = Conflator("polytope", Config, nested={}).load()
 
-print(Conflater("polytope", Config, nested={}).schema())
+print(Conflator("polytope", Config, nested={}).schema())
 

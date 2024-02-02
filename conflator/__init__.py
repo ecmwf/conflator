@@ -1,3 +1,3 @@
-from .conflate import CLIArg, ConfigModel, Conflater, EnvVar
+from .conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
-__all__ = ['CLIArg', 'ConfigModel', 'Conflater', 'EnvVar']
+__all__ = ['CLIArg', 'ConfigModel', 'Conflator', 'EnvVar']

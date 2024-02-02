@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from conflator import CLIArg, ConfigModel, Conflater, EnvVar, EnvVar
+from conflator import CLIArg, ConfigModel, Conflator, EnvVar, EnvVar
 from pydantic import Field
 from annotated_types import Annotated
 
@@ -21,8 +21,8 @@ def test_environment_variable_override(monkeypatch):
     monkeypatch.setenv("APPNAME_TEST_KEY", "env_key")
 
     with patch("sys.argv", ["test_script.py"]):
-        conflater = Conflater("appname", Config, nested={})
-        config = conflater.load()
+        conflator = Conflator("appname", Config, nested={})
+        config = conflator.load()
 
     assert config.test_email == "env@example.com"
     assert config.test_key == "env_key"
