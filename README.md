@@ -39,7 +39,7 @@ poetry add conflator
 
 ```python
 from pydantic import Field
-from conflate import EnvVar, CLIArg, ConfigModel
+from conflator import EnvVar, CLIArg, ConfigModel
 from annotations import Annotated
 
 class AppConfig(ConfigModel):
@@ -49,12 +49,12 @@ class AppConfig(ConfigModel):
     user: Annotated[str, EnvVar("USER"), CLIArg("--user"), Field(description="Your username")] = "foo"
 ```
 
-2. **Initialize Conflater**: Create an instance of the Conflater class, passing your application's name and the configuration model.
+2. **Initialize Conflator**: Create an instance of the Conflator class, passing your application's name and the configuration model.
 
 ```python
-from conflate import Conflater
+from conflator import Conflator
 
-config = Conflater(app_name="my_app", model=AppConfig).load()
+config = Conflator(app_name="my_app", model=AppConfig).load()
 ```
 
 3. **Access Configuration**: Use the loaded configuration throughout your application, knowing that the configuration has been fully validated.
@@ -74,7 +74,7 @@ your-app -f ./config/base.yaml -f ./config/production.yaml
 ### Nested config just works
 ```python
 from annotations import Annotated
-from conflate import EnvVar, CLIArg, ConfigModel
+from conflator import EnvVar, CLIArg, ConfigModel
 
 class DeeperConfig(ConfigModel):
     nested: Annnotated[str, EnvVar("NESTED"), CLIArg("--nested")] = "default"
@@ -87,7 +87,7 @@ class Config(ConfigModel):
 
 ### Generate the JSON schema for your configuration
 ```bash
-config = Conflater(app_name="my_app", model=AppConfig).schema() # uses pydantic's schema method behind the scenes
+config = Conflator(app_name="my_app", model=AppConfig).schema() # uses pydantic's schema method behind the scenes
 ```
 
 ## Limitations
