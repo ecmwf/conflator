@@ -79,6 +79,7 @@ your-app -f ./config/base.yaml -f ./config/production.yaml
 
 ### Generate the JSON schema for your configuration
 ```bash
+config = Conflater(app_name="my_app", model=AppConfig).schema() # uses pydantic's schema method behind the scenes
 ```
 
 ## Limitations
