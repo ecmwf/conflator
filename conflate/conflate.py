@@ -37,13 +37,7 @@ class ConfigModel(
         if type(info.context) != ParseContext:
             return handler(unvalidated)
 
-        # Unvalidated can be a dict or a already-intiialised Model
-        def get(key, default=None):
-            if isinstance(unvalidated, dict):
-                return unvalidated.get(key, default)
-            else:
-                return getattr(unvalidated, key, default)
-
+        # Unvalidated can be a dict or a already-intiialised Model, handle both
         def set(key, value):
             if isinstance(unvalidated, dict):
                 unvalidated[key] = value
@@ -96,24 +90,24 @@ class Conflater:
         ]
 
     @staticmethod
-    def find_models(t: Type[BaseModel], seen=None) -> set[Type[BaseModel]]:
+    def _find_models(t: Type[BaseModel], seen=None) -> set[Type[BaseModel]]:
         if seen is None:
             seen = set()
 
         if get_origin(t):
             for a in get_args(t):
                 if isinstance(a, ConfigModel) and a not in seen:
-                    Conflater.find_models(a, seen)
+                    Conflater._find_models(a, seen)
         else:
             if issubclass(t, ConfigModel) and t not in seen:
                 seen.add(t)
                 for k, v in t.__annotations__.items():
-                    Conflater.find_models(v, seen)
+                    Conflater._find_models(v, seen)
 
         return seen
 
     @staticmethod
-    def get_cli_args(model: Type[BaseModel], args: set[CLIArg] = None):
+    def _get_cli_args(model: Type[BaseModel], args: set[CLIArg] = None):
         if args is None:
             args = set()
         # TODO: model_title = model.model_config.get("title") or model.__name__
@@ -124,14 +118,14 @@ class Conflater:
         return args
 
     def load(self) -> BaseModel:
-        referenced_models = Conflater.find_models(self.model)
+        referenced_models = Conflater._find_models(self.model)
         # rprint(referenced_config_models)
 
         if self.cli:
             # Find all CLI args and then parse them
             cli_args = set()
             for m in referenced_models:
-                cli_args |= Conflater.get_cli_args(m, cli_args)
+                cli_args |= Conflater._get_cli_args(m, cli_args)
 
             # Could do a pre-validation here to see if which CLI args actually *need* to be set
             # and to give more information to the user about what is already set by config
