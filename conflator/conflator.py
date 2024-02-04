@@ -1,5 +1,5 @@
 import argparse
-import json
+import json, yaml
 import os
 from pathlib import Path
 from typing import Any, Dict, Tuple, Type, Union, get_args, get_origin
@@ -254,8 +254,12 @@ class Conflator:
     def _from_file(path: Path):
         try:
             with open(path, "r") as f:
-                return json.load(f)
-        except Exception:
+                if path.suffix == ".yaml" or path.suffix == ".yml":
+                    return yaml.safe_load(f)
+                else:
+                    return json.load(f)
+        except Exception as e:
+            print(f"Config Load error on {path}: {e}")
             return {}
 
     def _update_from_env(self) -> Dict:
