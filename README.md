@@ -1,3 +1,7 @@
+> [!WARNING]
+> This project is under development and not yet feature complete or tested.
+
+
 ![conflator logo](docs/conflator.png)
 
 > [!WARNING]
