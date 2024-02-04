@@ -1,8 +1,7 @@
+![conflator logo](docs/conflator.png)
+
 > [!WARNING]
 > This project is under development and not yet feature complete or tested.
-
-
-![conflator logo](docs/conflator.png)
 
 > [!WARNING]
 > This project is BETA and will be experimental for the forseable future. Interfaces and functionality are likely to change, and the project itself may be scrapped. DO NOT use this software in any project/software that is operational.
