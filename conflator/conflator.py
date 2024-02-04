@@ -3,6 +3,7 @@ import json, yaml
 import os
 from pathlib import Path
 from typing import Any, Dict, Tuple, Type, Union, get_args, get_origin
+from collections import namedtuple
 
 from pydantic import BaseModel, ValidationError, model_validator
 from pydantic_core import PydanticUndefined
@@ -56,7 +57,10 @@ class ConfigModel(
                     set(k, set_env)
 
             # Retrieve set CLI args
-            cli_args = [m for m in v.metadata if type(m) == CLIArg]
+            cli_args = [m for m in v.metadata 
+                        if type(m) == CLIArg
+                        and m.argparse_key is not None
+                        ]
             for ca in cli_args:
                 set_arg = getattr(info.context.cli_args, ca.argparse_key, None)
                 if set_arg is not None:
@@ -78,15 +82,15 @@ class Conflator:
         model: type[BaseModel],
         cli=True,
         argparser: argparse.ArgumentParser = None,
-        **overrides: Dict[str, Any],
-    ):
+        config_file: Path | None = None,
+        **overrides: Dict[str, Any],):
+    
         self.app_name = app_name
         self.model = model
         self.cli = cli
         self.parser = argparser
         self.overrides = overrides
-
-        self.config_files = [
+        self.config_files = [Path(config_file),] if config_file is not None else [
             Path() / "etc" / self.app_name / "config.json",
             Path() / "etc" / self.app_name / "config.yaml",
             Path.home() / f".{self.app_name}.json",
@@ -163,7 +167,7 @@ class Conflator:
             args = self.parser.parse_args()
 
         else:
-            args = {}
+            args = namedtuple("Args", ["config", "set"])(config = [], set = [])
 
         # Initialise config dictionary empty
         self.loaded_config = {}
