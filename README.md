@@ -80,7 +80,7 @@ from annotations import Annotated
 from conflator import EnvVar, CLIArg, ConfigModel
 
 class DeeperConfig(ConfigModel):
-    nested: Annnotated[str, EnvVar("NESTED"), CLIArg("--nested")] = "default"
+    nested: Annotated[str, EnvVar("NESTED"), CLIArg("--nested")] = "default"
 
 class Config(ConfigModel):
     host: str = "localhost"
