@@ -20,7 +20,9 @@ class NestedConfig(ConfigModel):
 
 
 class Config(ConfigModel):
-    user_email: Annotated[str, Field(), EnvVar("USER_EMAIL"), CLIArg("--user-email")] = "foo"
+    user_email: Annotated[
+        str, Field(), EnvVar("USER_EMAIL"), CLIArg("--user-email")
+    ] = "foo"
     user_key: Annotated[str, Field(description="Your API Key"), EnvVar("XYZ")] = "xyz"
     url: str = "http://example.com"
     secure: bool = Field(False)
@@ -31,4 +33,3 @@ class Config(ConfigModel):
 c = Conflator("polytope", Config, nested={}).load()
 
 print(Conflator("polytope", Config, nested={}).schema())
-
