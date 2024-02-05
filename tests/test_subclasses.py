@@ -1,13 +1,12 @@
 from dataclasses import dataclass, field
 from typing import Literal, Union
-from unittest.mock import patch
 
 import pytest
 import yaml
 from annotated_types import Annotated
 from pydantic import ConfigDict, Field
 
-from conflator import CLIArg, ConfigModel, Conflator, EnvVar
+from conflator import ConfigModel, Conflator
 
 
 class Action(ConfigModel):

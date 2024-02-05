@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-import pytest
 from annotated_types import Annotated
 from pydantic import Field
 
