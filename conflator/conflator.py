@@ -55,18 +55,12 @@ class ConfigModel(
             # Retrieve set environment variables
             env_vars = [m for m in v.metadata if type(m) == EnvVar]
             for ev in env_vars:
-                set_env = os.getenv(
-                    f"{info.context.app_name.upper()}_{(ev.name or k).upper()}", None
-                )
+                set_env = os.getenv(f"{info.context.app_name.upper()}_{(ev.name or k).upper()}", None)
                 if set_env is not None:
                     set(k, set_env)
 
             # Retrieve set CLI args
-            cli_args = [
-                m
-                for m in v.metadata
-                if type(m) == CLIArg and m.argparse_key is not None
-            ]
+            cli_args = [m for m in v.metadata if type(m) == CLIArg and m.argparse_key is not None]
             for ca in cli_args:
                 set_arg = getattr(info.context.cli_args, ca.argparse_key, None)
                 if set_arg is not None:
@@ -206,15 +200,11 @@ class Conflator:
         parse_context.app_name = self.app_name
 
         try:
-            result = self.model.model_validate(
-                self.loaded_config, context=parse_context
-            )
+            result = self.model.model_validate(self.loaded_config, context=parse_context)
         except ValidationError as e:
             output = rtree(f"[red]Configuration errors: {e.error_count()}[/red]")
             for err in e.errors():
-                output.add(
-                    f"[red]{err['msg'].upper()}:[/red][cyan] {self._loc_to_dot_sep(err['loc'])}[/cyan]"
-                )
+                output.add(f"[red]{err['msg'].upper()}:[/red][cyan] {self._loc_to_dot_sep(err['loc'])}[/cyan]")
             rprint(output)
             raise SystemExit(e.error_count())
 
@@ -224,9 +214,7 @@ class Conflator:
         return self.model.model_json_schema()
 
     @staticmethod
-    def _dot_path_to_nested_dict(
-        path: str, value: Any, convert_hyphens_to_underscores: bool = True
-    ) -> Dict[str, Any]:
+    def _dot_path_to_nested_dict(path: str, value: Any, convert_hyphens_to_underscores: bool = True) -> Dict[str, Any]:
         """
         Convert a dot-separated path into a nested dictionary with the specified value.
 
