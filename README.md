@@ -43,7 +43,7 @@ poetry add conflator
 ```python
 from pydantic import Field
 from conflator import EnvVar, CLIArg, ConfigModel
-from annotations import Annotated
+from annotated_types import Annotated
 
 class AppConfig(ConfigModel):
 
@@ -76,7 +76,7 @@ your-app -f ./config/base.yaml -f ./config/production.yaml
 
 ### Nested config just works
 ```python
-from annotations import Annotated
+from annotated_types import Annotated
 from conflator import EnvVar, CLIArg, ConfigModel
 
 class DeeperConfig(ConfigModel):
