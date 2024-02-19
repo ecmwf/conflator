@@ -41,7 +41,7 @@ class ConfigModel(
     @classmethod
     def wrap_root(cls, unvalidated, handler, info):
         # Skip if not validating via Conflator
-        if type(info.context) != ParseContext:
+        if not isinstance(info.context, ParseContext):
             return handler(unvalidated)
 
         # Unvalidated can be a dict or a already-intiialised Model, handle both
@@ -126,7 +126,7 @@ class Conflator:
             args = set()
         # TODO: model_title = model.model_config.get("title") or model.__name__
         for k, v in model.model_fields.items():
-            cli_args = [m for m in v.metadata if type(m) == CLIArg]
+            cli_args = [m for m in v.metadata if isinstance(m, CLIArg)]
             for ca in cli_args:
                 args.add(ca)
         return args
@@ -170,7 +170,8 @@ class Conflator:
                 default=[],
             )
 
-            args = self.parser.parse_args()
+            # args = self.parser.parse_args()
+            args, unknown = self.parser.parse_known_args()
 
         else:
             args = namedtuple("Args", ["config", "set"])(config=[], set=[])
