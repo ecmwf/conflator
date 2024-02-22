@@ -269,7 +269,7 @@ class Conflator:
                 else:
                     return json.load(f)
         except Exception as e:
-            print(f"Config Load error on {path}: {e}")
+            print(f"Tried {path} but: {e}")
             return {}
 
     def _update_from_env(self) -> Dict:
