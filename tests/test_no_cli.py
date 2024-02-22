@@ -1,6 +1,3 @@
-from unittest.mock import patch
-
-import pytest
 from annotated_types import Annotated
 from pydantic import Field
 
@@ -14,4 +11,6 @@ class Config(ConfigModel):
 
 def test_no_cli():
     conflator = Conflator("polytope", Config, cli=False)
+    conflator = Conflator("polytope", Config, cli=False)
     config = conflator.load()
+    print(config)

@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
 from typing import Literal, Union
-from unittest.mock import patch
 
 import pytest
 import yaml
 from annotated_types import Annotated
 from pydantic import ConfigDict, Field
 
-from conflator import CLIArg, ConfigModel, Conflator, EnvVar
+from conflator import ConfigModel, Conflator
 
 
 class Action(ConfigModel):
+    model_config = ConfigDict(extra="forbid")
     model_config = ConfigDict(extra="forbid")
     name: str
 
@@ -64,6 +64,14 @@ action_subclasses = tuple(
         ]
     )
 )
+action_subclasses = tuple(
+    set(Subclasses().get(Action).values())
+    - set(
+        [
+            Action,
+        ]
+    )
+)
 
 # Constuct a union type out of the subclasses
 # Field(discriminator="name") tells pydantic to look at the name
@@ -72,6 +80,8 @@ action_subclasses_union = Annotated[Union[action_subclasses], Field(discriminato
 
 
 class Config(ConfigModel):
+    actions: list[action_subclasses_union] = Field(discriminator="name")
+
     actions: list[action_subclasses_union] = Field(discriminator="name")
 
 
