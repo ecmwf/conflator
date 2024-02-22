@@ -182,13 +182,13 @@ class Conflator:
         # Then merge all config files
         config_files = self.config_files + [Path(f) for f in args.config]
         for cf in config_files:
-            self._merge(Conflator._from_file(cf))
+            self.loaded_config = Conflator._merge(self.loaded_config, Conflator._from_file(cf))
 
         # Then merge all --set arguments from CLI
         for setting in args.set:
             path, value = setting.split("=")
             rprint(f"SETTING {path} = {value}")
-            self._merge(Conflator._dot_path_to_nested_dict(path, value))
+            self.loaded_config = Conflator._merge(self.loaded_config, Conflator._dot_path_to_nested_dict(path, value))
 
         # Finally merge with kwargs passed to the constructor
         self.loaded_config.update(self.overrides)
@@ -234,8 +234,9 @@ class Conflator:
         current_level[parts[-1]] = value
         return nested_dict
 
-    def _merge(self, b, path=None):
-        a = self.loaded_config
+    @staticmethod
+    def _merge(a, b, path=None):
+        # a = self.loaded_config
         # b = copy.deepcopy(b)
 
         if path is None:
@@ -244,14 +245,19 @@ class Conflator:
         if not isinstance(b, dict):
             if isinstance(a, list) and isinstance(b, list):
                 return a + b
-            self.loaded_config = b
+            # self.loaded_config = b
+            a = b
 
         for key in b:
             if key in a:
                 if b[key] is None:
                     del a[key]
                 elif isinstance(a[key], dict) and isinstance(b[key], dict):
-                    a[key] = self._merge(a[key], b[key], path + [str(key)])
+                    # TODO: cannot merge here as if it was two configs...?
+                    # TODO: need to pass in a[key] as a Conflator object if we want to do this...
+
+                    # a[key] = a[key]._merge(b[key], path + [str(key)])
+                    a[key] = Conflator._merge(a[key], b[key], path + [str(key)])
                 elif isinstance(a[key], list) and isinstance(b[key], list):
                     a[key] = a[key] + b[key]
                 elif a[key] == b[key]:
@@ -261,6 +267,7 @@ class Conflator:
             else:
                 if b[key] is not None:
                     a[key] = b[key]
+        return a
 
     def _from_file(path: Path):
         try:
@@ -279,7 +286,7 @@ class Conflator:
         for k, v in self.model.model_fields.items():
             key = f"{self.app_name.upper()}_{(v.alias or k).upper()}"
             if key in env_vars:
-                self.loaded_config[v.alias] = env_vars[key]
+                self.loaded_config[k] = env_vars[key]
 
     def _update_from_cli_args(self):
         if not self.parser:
