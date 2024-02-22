@@ -271,7 +271,6 @@ class Conflator:
         except FileNotFoundError:
             print(f"Skipping {path}, file not found.")
             return {}
-            
 
     def _update_from_env(self) -> Dict:
         # Try to read from environment variables (case insensitive)
