@@ -1,12 +1,9 @@
-from typing import Dict, List, Optional, Union, Annotated
-import pytest
-import pydantic_core
-from dataclasses import field
-from pydantic import Field, validator
+from typing import Annotated
 from unittest.mock import patch
-import os
 
-from conflator import ConfigModel, Conflator, EnvVar, CLIArg
+from pydantic import Field
+
+from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
 
 class TestLoading:

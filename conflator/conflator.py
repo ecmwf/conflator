@@ -53,14 +53,14 @@ class ConfigModel(
 
         for k, v in cls.model_fields.items():
             # Retrieve set environment variables
-            env_vars = [m for m in v.metadata if type(m) == EnvVar]
+            env_vars = [m for m in v.metadata if isinstance(m, EnvVar)]
             for ev in env_vars:
                 set_env = os.getenv(f"{info.context.app_name.upper()}_{(ev.name or k).upper()}", None)
                 if set_env is not None:
                     set(k, set_env)
 
             # Retrieve set CLI args
-            cli_args = [m for m in v.metadata if type(m) == CLIArg and m.argparse_key is not None]
+            cli_args = [m for m in v.metadata if isinstance(m, CLIArg) and m.argparse_key is not None]
             for ca in cli_args:
                 set_arg = getattr(info.context.cli_args, ca.argparse_key, None)
                 if set_arg is not None:
