@@ -1,12 +1,10 @@
-from typing import Literal, Union, List
+from typing import List, Literal, Union
 
 import pytest
 import yaml
-from pydantic import validator
-from pydantic import ConfigDict
+from pydantic import ConfigDict, validator
 
 from conflator import ConfigModel, Conflator
-
 
 accepted_axes = ["latitude", "lon", "level"]
 
