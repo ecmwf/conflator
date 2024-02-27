@@ -183,28 +183,6 @@ class TestLoading:
         result = Conflator._merge(conflator.loaded_config, [2])
         assert result == [1, 2]
 
-    # @pytest.fixture
-    # def fake_yaml_file(fs):
-    #     # Create fake YAML content
-    #     yaml_content = """
-    #     key1: value1
-    #     key2: value2
-    #     """
-
-    #     # Write fake YAML content to a fake file
-    #     fs.create_file("fake_file.yaml")
-    #     fake_dir = '/path/to/fake/dir'
-    #     fake_file = os.path.join(fake_dir, 'fake_file.txt')
-    #     os.makedirs(fake_dir)
-    #     with open("fake_file.yaml", 'w') as f:
-    #         f.write(yaml_content)
-
-    # def test_from_file(self, fs):
-    #     # with patch('yaml_file_path', '/path/to/fake.yaml'):
-    #     print("Current working directory:", os.getcwd())
-    #     print("Fake filesystem contents:", fs.get_object("/"))
-    #     print(Conflator._from_file("fake_file.yaml"))
-
     def test_update_from_env(self, monkeypatch):
         class Config(ConfigModel):
             test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
@@ -249,17 +227,3 @@ class TestLoading:
         for tuple, expected in test_cases:
             result = Conflator._loc_to_dot_sep(tuple)
             assert result == expected
-
-    # def test_validator(self):
-    #     class TransformationConfig(ConfigModel):
-    #         # TODO: how to determine according to the str key in the dict, which subtransformation
-    #         # attributes should not be optional anymore...?
-    #         cyclic_options: List[str] = [" "]
-
-    #         @validator('cyclic_options')
-    #         def check_size(cls, v):
-    #             assert len(v) == 1
-    #             return v
-
-    #     conflator = Conflator(app_name="polytope", model=TransformationConfig)
-    #     datacube_config = conflator.load()
