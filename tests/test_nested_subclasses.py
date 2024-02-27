@@ -45,7 +45,7 @@ class Config(ConfigModel):
 
 def test_nested_subclasses_config():
     config = yaml.safe_load(
-            """
+        """
     config:
         - axis_name: latitude
           transformations:
@@ -59,16 +59,15 @@ def test_nested_subclasses_config():
     )
     conflator = Conflator("test-app", Config, cli=False, **config)
     config = conflator.load()
-    assert config.config == [AxisConfig(axis_name='latitude',
-                                        transformations=[CyclicConfig(name='cyclic', range=[0, 1])]),
-                             AxisConfig(axis_name='lon',
-                                        transformations=[CyclicConfig(name='cyclic',
-                                                                      range=[0, 3])])]
+    assert config.config == [
+        AxisConfig(axis_name="latitude", transformations=[CyclicConfig(name="cyclic", range=[0, 1])]),
+        AxisConfig(axis_name="lon", transformations=[CyclicConfig(name="cyclic", range=[0, 3])]),
+    ]
 
 
 def test_nested_subclasses_config_not_allowed():
     config = yaml.safe_load(
-            """
+        """
     config:
         - axis_name: latitude
           transformations:
@@ -83,8 +82,7 @@ def test_nested_subclasses_config_not_allowed():
     with pytest.raises(SystemExit):
         conflator = Conflator("test-app", Config, cli=False, **config)
         config = conflator.load()
-        assert config.config == [AxisConfig(axis_name='latitude',
-                                            transformations=[CyclicConfig(name='cyclic', range=[0, 1])]),
-                                 AxisConfig(axis_name='level',
-                                            transformations=[CyclicConfig(name='cyclic',
-                                                                          range=[0, 3])])]
+        assert config.config == [
+            AxisConfig(axis_name="latitude", transformations=[CyclicConfig(name="cyclic", range=[0, 1])]),
+            AxisConfig(axis_name="level", transformations=[CyclicConfig(name="cyclic", range=[0, 3])]),
+        ]
