@@ -276,8 +276,8 @@ class Conflator:
                     return yaml.safe_load(f)
                 else:
                     return json.load(f)
-        except Exception as e:
-            print(f"Config Load error on {path}: {e}")
+        except FileNotFoundError:
+            print(f"Skipping {path}, file not found.")
             return {}
 
     def _update_from_env(self) -> Dict:

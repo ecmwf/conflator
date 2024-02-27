@@ -13,3 +13,4 @@ merged.yaml
 **/build
 .ruff_cache
 poetry.lock
+.venv

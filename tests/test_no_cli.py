@@ -11,6 +11,7 @@ class Config(ConfigModel):
 
 def test_no_cli():
     conflator = Conflator("polytope", Config, cli=False)
+    conflator = Conflator("polytope", Config, cli=False)
     config = conflator.load()
     assert config.test_key == "default_key"
     assert config.test_email == "default@example.com"

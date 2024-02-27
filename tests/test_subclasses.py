@@ -11,6 +11,7 @@ from conflator import ConfigModel, Conflator
 
 class Action(ConfigModel):
     model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid")
     name: str
 
 
@@ -63,6 +64,14 @@ action_subclasses = tuple(
         ]
     )
 )
+action_subclasses = tuple(
+    set(Subclasses().get(Action).values())
+    - set(
+        [
+            Action,
+        ]
+    )
+)
 
 # Constuct a union type out of the subclasses
 # Field(discriminator="name") tells pydantic to look at the name
@@ -71,6 +80,8 @@ action_subclasses_union = Annotated[Union[action_subclasses], Field(discriminato
 
 
 class Config(ConfigModel):
+    actions: list[action_subclasses_union] = Field(discriminator="name")
+
     actions: list[action_subclasses_union] = Field(discriminator="name")
 
 
