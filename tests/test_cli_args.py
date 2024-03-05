@@ -21,5 +21,4 @@ def test_cli_argument_override():
     with patch("sys.argv", ["test_script.py"] + test_args):
         conflator = Conflator("polytope", Config, nested={})
         config = conflator.load()
-
         assert config.test_email == "cli@example.com"
