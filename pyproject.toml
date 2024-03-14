@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "conflator"
-version = "0.1.3"
+version = "0.1.4"
 description = "Load small app configurations from environment variables, command line arguments and config files, according to a pydantic model."
 authors = ["James Hawkes <James.Hawkes@ecmwf.int>"]
 readme = "README.md"
