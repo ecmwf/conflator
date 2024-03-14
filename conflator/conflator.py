@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 from collections import namedtuple
 from pathlib import Path
@@ -187,13 +188,13 @@ class Conflator:
         # Then merge all --set arguments from CLI
         for setting in args.set:
             path, value = setting.split("=")
-            rprint(f"SETTING {path} = {value}")
+            logging.debug(f"Setting {path} = {value}")
             self.loaded_config = Conflator._merge(self.loaded_config, Conflator._dot_path_to_nested_dict(path, value))
 
         # Finally merge with kwargs passed to the constructor
         self.loaded_config.update(self.overrides)
 
-        rprint(f"LOADED CONFIG {self.loaded_config}")
+        logging.debug(f"Conflated config: {self.loaded_config}")
 
         # Finally, validate the model, invoking the custom validator to inject CLI args and environment variables
         parse_context = ParseContext()
@@ -277,7 +278,7 @@ class Conflator:
                 else:
                     return json.load(f)
         except FileNotFoundError:
-            print(f"Skipping {path}, file not found.")
+            logging.debug(f"Skipping {path}, file not found.")
             return {}
 
     def _update_from_env(self) -> Dict:
