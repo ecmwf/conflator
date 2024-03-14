@@ -211,7 +211,7 @@ class Conflator:
             for err in e.errors():
                 output.add(f"[red]{err['msg'].upper()}:[/red][cyan] {self._loc_to_dot_sep(err['loc'])}[/cyan]")
             rprint(output)
-            rprint(f"[red]Use --help for more information.[/red]")
+            rprint("[red]Use --help for more information.[/red]")
             raise SystemExit(e.error_count())
 
         return result
