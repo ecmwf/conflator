@@ -41,7 +41,7 @@ class TestLoading:
             assert len(cli_args) == 1
             for arg in cli_args:
                 assert arg.argparse_key == "test_email"
-                assert arg.description is None
+                assert arg.description == ""
                 assert arg.args == ("--test-email",)
 
         class NewConfig(ConfigModel):
@@ -58,7 +58,7 @@ class TestLoading:
             assert len(cli_args) == 2
             for arg in cli_args:
                 assert arg.argparse_key in ["test_email", "test_key"]
-                assert arg.description is None
+                assert arg.description in ["Test API Key", ""]
                 if arg.argparse_key == "test_email":
                     assert arg.args == ("--test-email",)
                 else:
