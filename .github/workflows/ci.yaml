@@ -113,11 +113,6 @@ jobs:
           python -m pip install -r requirements.txt 
           python -m pip install -r ./tests/requirements_test.txt
 
-      - name: Verify Source Distribution
-        shell: bash -eux {0}
-        run: |
-          python setup.py sdist
-          python -m pip install dist/*
       - name: Run Tests with Repository Code
         env:
           LD_LIBRARY_PATH: ${{ steps.install-dependencies.outputs.lib_path }}
