@@ -97,8 +97,8 @@ class Conflator:
             ]
             if config_file is not None
             else [
-                Path() / "etc" / self.app_name / "config.json",
-                Path() / "etc" / self.app_name / "config.yaml",
+                Path("/") / "etc" / self.app_name / "config.json",
+                Path("/") / "etc" / self.app_name / "config.yaml",
                 Path.home() / f".{self.app_name}.json",
                 Path.home() / f".{self.app_name}.yaml",
             ]
@@ -128,7 +128,10 @@ class Conflator:
         # TODO: model_title = model.model_config.get("title") or model.__name__
         for k, v in model.model_fields.items():
             cli_args = [m for m in v.metadata if isinstance(m, CLIArg)]
+            description = v.description or ""
+
             for ca in cli_args:
+                ca.description = description
                 args.add(ca)
         return args
 
@@ -208,6 +211,7 @@ class Conflator:
             for err in e.errors():
                 output.add(f"[red]{err['msg'].upper()}:[/red][cyan] {self._loc_to_dot_sep(err['loc'])}[/cyan]")
             rprint(output)
+            rprint(f"[red]Use --help for more information.[/red]")
             raise SystemExit(e.error_count())
 
         return result
@@ -294,7 +298,7 @@ class Conflator:
             self.parser = argparse.ArgumentParser(
                 description=f"All arguments can be overriden with {self.app_name.upper()}_ARG."
                 + f"They can also be set in JSON files: /etc/{self.app_name}/config.json and ~/.{self.app_name}apirc"
-                + [f" - {cf}" for cf in self.config_files],
+                + [f" - {cf.resolve()}" for cf in self.config_files],
                 formatter_class=RawTextRichHelpFormatter,
             )
         # Add arguments based on Pydantic model fields
