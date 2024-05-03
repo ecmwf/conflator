@@ -37,9 +37,7 @@ class TestLoading:
                 return v
 
         parser = argparse.ArgumentParser(allow_abbrev=False)
-        conflator = Conflator(
-            app_name="app", model=SubConfig, argparser=parser, cli=False
-        )
+        conflator = Conflator(app_name="app", model=SubConfig, argparser=parser, cli=False)
         config = conflator.load()
         assert config == SubConfig(options=[" "])
         assert config.options == [" "]
