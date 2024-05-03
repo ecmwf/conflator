@@ -9,8 +9,12 @@ from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 class TestLoading:
     def test_find_models(self):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         found_models = Conflator._find_models(Config)
         for model in found_models:
@@ -30,8 +34,12 @@ class TestLoading:
 
     def test_get_cli_args(self):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         test_args = ["--test-email", "cli@example.com"]
         with patch("sys.argv", ["test_script.py"] + test_args):
@@ -45,9 +53,14 @@ class TestLoading:
                 assert arg.args == ("--test-email",)
 
         class NewConfig(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
             test_key: Annotated[
-                str, Field(description="Test API Key"), EnvVar("TEST_KEY"), CLIArg("--test-key")
+                str,
+                Field(description="Test API Key"),
+                EnvVar("TEST_KEY"),
+                CLIArg("--test-key"),
             ] = "default_key"
 
         test_args = ["--test-key", "key_example"]
@@ -66,8 +79,12 @@ class TestLoading:
 
     def test_schema(self, monkeypatch):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         monkeypatch.setenv("APPNAME_TEST_KEY", "env_key")
 
@@ -77,7 +94,11 @@ class TestLoading:
             assert config.test_key == "env_key"
             assert conflator.schema() == {
                 "properties": {
-                    "test_email": {"default": "default@example.com", "title": "Test Email", "type": "string"},
+                    "test_email": {
+                        "default": "default@example.com",
+                        "title": "Test Email",
+                        "type": "string",
+                    },
                     "test_key": {
                         "default": "default_key",
                         "description": "Test API Key",
@@ -93,8 +114,12 @@ class TestLoading:
             key: str = "test"
 
         class NewConfig(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
             nested_key: NestedConfig = NestedConfig()
 
         monkeypatch.setenv("APPNAME_TEST_KEY", "env_key")
@@ -106,20 +131,29 @@ class TestLoading:
             assert conflator.schema() == {
                 "$defs": {
                     "NestedConfig": {
-                        "properties": {"key": {"default": "test", "title": "Key", "type": "string"}},
+                        "properties": {
+                            "key": {"default": "test", "title": "Key", "type": "string"}
+                        },
                         "title": "NestedConfig",
                         "type": "object",
                     }
                 },
                 "properties": {
-                    "test_email": {"default": "default@example.com", "title": "Test Email", "type": "string"},
+                    "test_email": {
+                        "default": "default@example.com",
+                        "title": "Test Email",
+                        "type": "string",
+                    },
                     "test_key": {
                         "default": "default_key",
                         "description": "Test API Key",
                         "title": "Test Key",
                         "type": "string",
                     },
-                    "nested_key": {"allOf": [{"$ref": "#/$defs/NestedConfig"}], "default": {"key": "test"}},
+                    "nested_key": {
+                        "allOf": [{"$ref": "#/$defs/NestedConfig"}],
+                        "default": {"key": "test"},
+                    },
                 },
                 "title": "NewConfig",
                 "type": "object",
@@ -127,13 +161,21 @@ class TestLoading:
 
     def test_dot_path_to_nested_dict(self):
         path = "test-0.test-1.test-2"
-        assert Conflator._dot_path_to_nested_dict(path, 2, False) == {"test-0": {"test-1": {"test-2": 2}}}
-        assert Conflator._dot_path_to_nested_dict(path, 2, True) == {"test_0": {"test_1": {"test_2": 2}}}
+        assert Conflator._dot_path_to_nested_dict(path, 2, False) == {
+            "test-0": {"test-1": {"test-2": 2}}
+        }
+        assert Conflator._dot_path_to_nested_dict(path, 2, True) == {
+            "test_0": {"test_1": {"test_2": 2}}
+        }
 
     def test_merge(self, monkeypatch):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         conflator = Conflator("appname", Config)
 
@@ -144,33 +186,56 @@ class TestLoading:
             conflator._update_from_env()
         assert conflator.loaded_config == {"test_key": "env_key_2"}
 
-        Conflator._merge(conflator.loaded_config, {"test_email": "new_default@example.com"})
-        assert conflator.loaded_config == {"test_key": "env_key_2", "test_email": "new_default@example.com"}
+        Conflator._merge(
+            conflator.loaded_config, {"test_email": "new_default@example.com"}
+        )
+        assert conflator.loaded_config == {
+            "test_key": "env_key_2",
+            "test_email": "new_default@example.com",
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": "env_key_3"})
-        assert conflator.loaded_config == {"test_key": "env_key_3", "test_email": "new_default@example.com"}
+        assert conflator.loaded_config == {
+            "test_key": "env_key_3",
+            "test_email": "new_default@example.com",
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": None})
         assert conflator.loaded_config == {"test_email": "new_default@example.com"}
 
         Conflator._merge(conflator.loaded_config, {"test_key": [1, 2]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [1, 2]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [1, 2],
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": [3, 4]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [1, 2, 3, 4]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [1, 2, 3, 4],
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": None})
         assert conflator.loaded_config == {"test_email": "new_default@example.com"}
 
         Conflator._merge(conflator.loaded_config, {"test_key": {"test": 1}})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": {"test": 1}}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": {"test": 1},
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": [2]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [2]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [2],
+        }
 
         # TODO: implement this...
         Conflator._merge(conflator.loaded_config, {"test_key": {"test_1": 2}})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": {"test_1": 2}}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": {"test_1": 2},
+        }
 
         Conflator._merge(conflator.loaded_config, {"new_test_key": {"test_1": 2}})
         assert conflator.loaded_config == {
@@ -185,8 +250,12 @@ class TestLoading:
 
     def test_update_from_env(self, monkeypatch):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         monkeypatch.setenv("APPNAME_TEST_KEY", "env_key")
 
@@ -203,8 +272,12 @@ class TestLoading:
 
     def test_update_from_cli_args(self):
         class Config(ConfigModel):
-            test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-            test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+            test_email: Annotated[
+                str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+            ] = "default@example.com"
+            test_key: Annotated[
+                str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+            ] = "default_key"
 
         test_args = ["--test-email", "cli@example.com"]
         with patch("sys.argv", ["test_script.py"] + test_args):
