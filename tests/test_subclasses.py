@@ -48,8 +48,12 @@ class Subclasses:
             return self.cache[target.__name__]
         except KeyError:
             # Deduplicate classes by __name__
-            deduped = list({subcls.__name__: subcls for subcls in target.__subclasses__()}.values())
-            subclasses = {target.__name__: target} | {k: v for subcls in deduped for k, v in self.get(subcls).items()}
+            deduped = list(
+                {subcls.__name__: subcls for subcls in target.__subclasses__()}.values()
+            )
+            subclasses = {target.__name__: target} | {
+                k: v for subcls in deduped for k, v in self.get(subcls).items()
+            }
             subclasses[target.__name__] = target
             self.cache[target.__name__] = subclasses
             return subclasses
@@ -76,7 +80,9 @@ action_subclasses = tuple(
 # Constuct a union type out of the subclasses
 # Field(discriminator="name") tells pydantic to look at the name
 # field to decide what type of the union to attempt to parse
-action_subclasses_union = Annotated[Union[action_subclasses], Field(discriminator="name")]
+action_subclasses_union = Annotated[
+    Union[action_subclasses], Field(discriminator="name")
+]
 
 
 class Config(ConfigModel):

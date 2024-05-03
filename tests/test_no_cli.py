@@ -5,8 +5,12 @@ from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
 
 class Config(ConfigModel):
-    test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
-    test_key: Annotated[str, Field(description="Test API Key"), EnvVar("TEST_KEY")] = "default_key"
+    test_email: Annotated[
+        str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")
+    ] = "default@example.com"
+    test_key: Annotated[
+        str, Field(description="Test API Key"), EnvVar("TEST_KEY")
+    ] = "default_key"
 
 
 def test_no_cli():
