@@ -47,7 +47,10 @@ class TestLoading:
         class NewConfig(ConfigModel):
             test_email: Annotated[str, Field(), EnvVar("TEST_EMAIL"), CLIArg("--test-email")] = "default@example.com"
             test_key: Annotated[
-                str, Field(description="Test API Key"), EnvVar("TEST_KEY"), CLIArg("--test-key")
+                str,
+                Field(description="Test API Key"),
+                EnvVar("TEST_KEY"),
+                CLIArg("--test-key"),
             ] = "default_key"
 
         test_args = ["--test-key", "key_example"]
@@ -77,7 +80,11 @@ class TestLoading:
             assert config.test_key == "env_key"
             assert conflator.schema() == {
                 "properties": {
-                    "test_email": {"default": "default@example.com", "title": "Test Email", "type": "string"},
+                    "test_email": {
+                        "default": "default@example.com",
+                        "title": "Test Email",
+                        "type": "string",
+                    },
                     "test_key": {
                         "default": "default_key",
                         "description": "Test API Key",
@@ -112,14 +119,21 @@ class TestLoading:
                     }
                 },
                 "properties": {
-                    "test_email": {"default": "default@example.com", "title": "Test Email", "type": "string"},
+                    "test_email": {
+                        "default": "default@example.com",
+                        "title": "Test Email",
+                        "type": "string",
+                    },
                     "test_key": {
                         "default": "default_key",
                         "description": "Test API Key",
                         "title": "Test Key",
                         "type": "string",
                     },
-                    "nested_key": {"allOf": [{"$ref": "#/$defs/NestedConfig"}], "default": {"key": "test"}},
+                    "nested_key": {
+                        "allOf": [{"$ref": "#/$defs/NestedConfig"}],
+                        "default": {"key": "test"},
+                    },
                 },
                 "title": "NewConfig",
                 "type": "object",
@@ -145,32 +159,53 @@ class TestLoading:
         assert conflator.loaded_config == {"test_key": "env_key_2"}
 
         Conflator._merge(conflator.loaded_config, {"test_email": "new_default@example.com"})
-        assert conflator.loaded_config == {"test_key": "env_key_2", "test_email": "new_default@example.com"}
+        assert conflator.loaded_config == {
+            "test_key": "env_key_2",
+            "test_email": "new_default@example.com",
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": "env_key_3"})
-        assert conflator.loaded_config == {"test_key": "env_key_3", "test_email": "new_default@example.com"}
+        assert conflator.loaded_config == {
+            "test_key": "env_key_3",
+            "test_email": "new_default@example.com",
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": None})
         assert conflator.loaded_config == {"test_email": "new_default@example.com"}
 
         Conflator._merge(conflator.loaded_config, {"test_key": [1, 2]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [1, 2]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [1, 2],
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": [3, 4]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [1, 2, 3, 4]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [1, 2, 3, 4],
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": None})
         assert conflator.loaded_config == {"test_email": "new_default@example.com"}
 
         Conflator._merge(conflator.loaded_config, {"test_key": {"test": 1}})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": {"test": 1}}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": {"test": 1},
+        }
 
         Conflator._merge(conflator.loaded_config, {"test_key": [2]})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": [2]}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": [2],
+        }
 
         # TODO: implement this...
         Conflator._merge(conflator.loaded_config, {"test_key": {"test_1": 2}})
-        assert conflator.loaded_config == {"test_email": "new_default@example.com", "test_key": {"test_1": 2}}
+        assert conflator.loaded_config == {
+            "test_email": "new_default@example.com",
+            "test_key": {"test_1": 2},
+        }
 
         Conflator._merge(conflator.loaded_config, {"new_test_key": {"test_1": 2}})
         assert conflator.loaded_config == {
