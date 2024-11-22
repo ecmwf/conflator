@@ -117,8 +117,8 @@ class Conflator:
         else:
             if issubclass(t, ConfigModel) and t not in seen:
                 seen.add(t)
-                for k, v in t.__annotations__.items():
-                    Conflator._find_models(v, seen)
+                for v in t.model_fields.values():
+                    Conflator._find_models(v.annotation, seen)
 
         return seen
 
@@ -138,7 +138,7 @@ class Conflator:
 
     def load(self) -> BaseModel:
         referenced_models = Conflator._find_models(self.model)
-        # rprint(referenced_config_models)
+        rprint(referenced_models)
 
         if self.cli:
             # Find all CLI args and then parse them
