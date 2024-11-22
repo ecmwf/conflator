@@ -1,8 +1,7 @@
 from unittest.mock import patch
-from typing import Any
 
 from annotated_types import Annotated
-from pydantic import Field, model_validator, create_model, ConfigDict
+from pydantic import ConfigDict, Field
 
 from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
