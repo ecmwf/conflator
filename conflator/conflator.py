@@ -17,13 +17,14 @@ from rich_argparse import RawTextRichHelpFormatter
 
 
 class CLIArg:
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         self.args = args
+        self.kwargs = kwargs
         self.description = None
         self.argparse_key = None
 
     def __repr__(self):
-        return f"CLIArg(args = {self.args}, description = {self.description}, argparse_key = {self.argparse_key})"
+        return f"CLIArg(args = {self.args}, kwargs = {self.kwargs}, description = {self.description}, argparse_key = {self.argparse_key})"
 
 
 class EnvVar:
@@ -157,7 +158,7 @@ class Conflator:
                 )
 
             for ca in cli_args:
-                action = self.parser.add_argument(*ca.args, help=ca.description)
+                action = self.parser.add_argument(*ca.args, **ca.kwargs, help=ca.description)
                 ca.argparse_key = action.dest
 
             self.parser.add_argument(
