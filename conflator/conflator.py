@@ -24,7 +24,10 @@ class CLIArg:
         self.argparse_key = None
 
     def __repr__(self):
-        return f"CLIArg(args = {self.args}, kwargs = {self.kwargs}, description = {self.description}, argparse_key = {self.argparse_key})"
+        return (
+            f"CLIArg(args = {self.args}, kwargs = {self.kwargs}, "
+            + f"description = {self.description}, argparse_key = {self.argparse_key})"
+        )
 
 
 class EnvVar:
