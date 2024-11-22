@@ -1,13 +1,31 @@
 from unittest.mock import patch
+from typing import Any
 
 from annotated_types import Annotated
-from pydantic import Field
+from pydantic import Field, model_validator, create_model, ConfigDict
 
 from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 
 
 class NestedConfig(ConfigModel):
-    nested_field: str = "default_value"
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    nested_field: Annotated[str, CLIArg("--nested")] = "default_value"
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_nested(cls, data: Any) -> Any:
+        if isinstance(data, str):
+            return {"nested_field": data}
+        return data
+
+
+class ConfigWithCLI(ConfigModel):
+    arg1: NestedConfig = NestedConfig()
+
+
+class InheritedConfig(ConfigWithCLI):
+    pass
 
 
 class Config(ConfigModel):
@@ -22,3 +40,11 @@ def test_cli_argument_override():
         conflator = Conflator("polytope", Config, nested={})
         config = conflator.load()
         assert config.test_email == "cli@example.com"
+
+
+def test_inherited_cli_arg():
+    conflator = Conflator("test", InheritedConfig)
+    cli_args = set()
+    for m in Conflator._find_models(conflator.model):
+        cli_args |= Conflator._get_cli_args(m, cli_args)
+    assert len(cli_args) == 1
