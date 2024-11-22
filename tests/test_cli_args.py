@@ -12,13 +12,6 @@ class NestedConfig(ConfigModel):
 
     nested_field: Annotated[str, CLIArg("--nested")] = "default_value"
 
-    @model_validator(mode="before")
-    @classmethod
-    def validate_nested(cls, data: Any) -> Any:
-        if isinstance(data, str):
-            return {"nested_field": data}
-        return data
-
 
 class ConfigWithCLI(ConfigModel):
     arg1: NestedConfig = NestedConfig()
