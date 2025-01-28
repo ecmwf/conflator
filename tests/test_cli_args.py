@@ -9,7 +9,7 @@ from conflator import CLIArg, ConfigModel, Conflator, EnvVar
 class NestedConfig(ConfigModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    nested_field: Annotated[str, CLIArg("--nested")] = "default_value"
+    nested_field: Annotated[str, CLIArg("--nested")] = "default_nested"
 
 
 class ConfigWithCLI(ConfigModel):
