@@ -17,18 +17,21 @@ class Action(ConfigModel):
 
 class Source(Action):
     "Produces messages"
+
     name: Literal["Source"]
     start_from: str
 
 
 class Process(Action):
     "Processes messages"
+
     name: Literal["Process"]
     should_flub_widgets: bool
 
 
 class Sink(Action):
     "Consumes messages"
+
     name: Literal["Sink"]
     emit_aviso_notification: bool
 
