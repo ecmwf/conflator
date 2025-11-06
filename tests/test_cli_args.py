@@ -1,7 +1,7 @@
-from unittest.mock import patch
 import io
-from contextlib import redirect_stdout
 import json
+from contextlib import redirect_stdout
+from unittest.mock import patch
 
 from annotated_types import Annotated
 from pydantic import ConfigDict, Field
