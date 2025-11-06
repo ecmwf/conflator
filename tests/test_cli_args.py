@@ -1,4 +1,7 @@
 from unittest.mock import patch
+import io
+from contextlib import redirect_stdout
+import json
 
 from annotated_types import Annotated
 from pydantic import ConfigDict, Field
@@ -40,3 +43,25 @@ def test_inherited_cli_arg():
     for m in Conflator._find_models(conflator.model):
         cli_args |= Conflator._get_cli_args(m, cli_args)
     assert len(cli_args) == 1
+
+
+def test_cli_schema_printing():
+
+    test_args = ["--print-schema"]
+    with patch("sys.argv", ["test_script.py"] + test_args):
+        conflator = Conflator("test", Config)
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            try:
+                config = conflator.load()
+            except SystemExit as cm:
+                pass
+
+        # Verify printed JSON content
+        output = buf.getvalue().strip()
+        parsed = json.loads(output)
+
+        email_fields = {'default': 'default@example.com', 'title': 'Test Email', 'type': 'string'}
+        assert parsed['properties']['test_email'] == email_fields
+        assert parsed['properties']['test_key']['title'] == 'Test Key'
+        assert parsed['properties']['nested_config']['default'] == {'nested_field': 'default_nested'}

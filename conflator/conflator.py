@@ -36,6 +36,23 @@ class EnvVar:
         self.name = name
 
 
+def make_print_schema_action(conflator: Conflator):
+    """Factory that returns an argparse.Action subclass bound to a specific Conflator instance."""
+
+    class PrintSchemaAction(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            try:
+                schema = conflator.schema()
+                rprint(json.dumps(schema, indent=2))
+            except Exception as e:
+                # if computing schema fails, still exit (optionally print error)
+                rprint(f"[red]Failed to build schema: {e}[/red]")
+
+            parser.exit()
+
+    return PrintSchemaAction
+
+
 class ConfigModel(
     BaseModel,
     revalidate_instances="always",
@@ -176,6 +193,14 @@ class Conflator:
                 action="append",
                 help="Override config with additional configuration files, e.g. --config ./config.yaml",
                 default=[],
+            )
+            PrintSchemaAction = make_print_schema_action(self)
+            self.parser.register("action", "print_schema", PrintSchemaAction)
+            self.parser.add_argument(
+                "--print-schema",
+                action="print_schema",
+                help="Print the JSON schema for the configuration and exit",
+                nargs=0,
             )
 
             # args = self.parser.parse_args()
