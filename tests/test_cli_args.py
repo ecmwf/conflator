@@ -53,8 +53,8 @@ def test_cli_schema_printing():
         buf = io.StringIO()
         with redirect_stdout(buf):
             try:
-                config = conflator.load()
-            except SystemExit as cm:
+                conflator.load()
+            except SystemExit:
                 pass
 
         # Verify printed JSON content
