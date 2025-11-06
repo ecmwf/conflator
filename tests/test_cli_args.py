@@ -61,7 +61,7 @@ def test_cli_schema_printing():
         output = buf.getvalue().strip()
         parsed = json.loads(output)
 
-        email_fields = {'default': 'default@example.com', 'title': 'Test Email', 'type': 'string'}
-        assert parsed['properties']['test_email'] == email_fields
-        assert parsed['properties']['test_key']['title'] == 'Test Key'
-        assert parsed['properties']['nested_config']['default'] == {'nested_field': 'default_nested'}
+        email_fields = {"default": "default@example.com", "title": "Test Email", "type": "string"}
+        assert parsed["properties"]["test_email"] == email_fields
+        assert parsed["properties"]["test_key"]["title"] == "Test Key"
+        assert parsed["properties"]["nested_config"]["default"] == {"nested_field": "default_nested"}
