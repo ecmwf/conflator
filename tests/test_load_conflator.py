@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Union
 
 import pydantic_core
 import pytest
-from pydantic import validator
+from pydantic import field_validator
 
 from conflator import ConfigModel, Conflator
 
@@ -31,7 +31,7 @@ class TestLoading:
         class SubConfig(ConfigModel):
             options: List[str] = [" "]
 
-            @validator("options")
+            @field_validator("options")
             def check_size(cls, v):
                 assert len(v) == 1
                 return v
@@ -73,7 +73,7 @@ class TestLoading:
         class Config(ConfigModel):
             options: Dict[str, SubConfig] = {"": SubConfig()}
 
-            @validator("options")
+            @field_validator("options")
             def check_size(cls, v):
                 assert len(v) == 1
                 return v
@@ -89,7 +89,7 @@ class TestLoading:
         class Config(ConfigModel):
             options: Dict[str, int] = {"": 0}
 
-            @validator("options")
+            @field_validator("options")
             def check_keys(cls, v):
                 for key in v.keys():
                     assert key in ["", "1", "2"]
