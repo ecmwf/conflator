@@ -131,7 +131,7 @@ class TestLoading:
                         "type": "string",
                     },
                     "nested_key": {
-                        "allOf": [{"$ref": "#/$defs/NestedConfig"}],
+                        "$ref": "#/$defs/NestedConfig",
                         "default": {"key": "test"},
                     },
                 },

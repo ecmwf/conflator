@@ -1,4 +1,0 @@
-pydantic==2.6.0
-pydantic_core==2.16.1
-rich==13.7.0
-rich-argparse==1.4.0
