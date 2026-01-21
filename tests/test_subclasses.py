@@ -78,8 +78,7 @@ class Config(ConfigModel):
 
 
 def test_subclasses():
-    config = yaml.safe_load(
-        """
+    config = yaml.safe_load("""
 actions:
     - name: "Source"
       start_from: 01031997
@@ -90,8 +89,7 @@ actions:
 
     - name: Sink
       emit_aviso_notification: False
-"""
-    )
+""")
     conflator = Conflator("test-app", Config, cli=False, **config)
     config = conflator.load()
 
@@ -100,8 +98,7 @@ actions:
 
 def test_subclasses_extra_key():
     with pytest.raises(SystemExit):
-        config = yaml.safe_load(
-            """
+        config = yaml.safe_load("""
     actions:
         - name: "Source"
           start_from: 01031997
@@ -112,7 +109,6 @@ def test_subclasses_extra_key():
 
         - name: Sink
           emit_aviso_notification: False
-    """
-        )
+    """)
         conflator = Conflator("test-app", Config, cli=False, **config)
         config = conflator.load()
